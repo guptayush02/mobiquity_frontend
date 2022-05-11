@@ -59,3 +59,10 @@ export const deleteFile = (id) => {
     url: `/api/v1/file/${id}`
   })
 }
+
+export const sharedLink = (id) => {
+  return request({
+    method: "get",
+    url: `/api/v1/public-file?id=${id}`
+  })
+}

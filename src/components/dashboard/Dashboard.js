@@ -134,7 +134,7 @@ export default function Dashboard() {
                     <ShareIcon onClick={() => setShareUrlId(row.id)} />
                   </IconButton>
                   {
-                    shareUrlId === row.id && `http://localhost:3000/api/v1/public-file?id=${shareUrlId}`
+                    shareUrlId === row.id && `http://localhost:3000/public-file?id=${shareUrlId}`
                   }
                 </TableCell>
               </TableRow>
