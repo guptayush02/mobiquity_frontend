@@ -1,7 +1,10 @@
-# Clone project `git@github.com:decabits/ab.finance.git`
+# Clone project `https://github.com/guptayush02/file_upload_frontend.git`
 
-# npm install
+# Install dependency
+- `npm install`
 
-# npm start
+# Start project
+- `npm start`
 
-# [demo link](https://friendly-carson-eb484a.netlify.app/)
+# Build
+- `npm run build`
