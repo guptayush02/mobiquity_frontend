@@ -4,6 +4,15 @@ import config from '../constants/config'
 
 Axios.defaults.baseURL = config.API_URL
 
+export const fileUpload = formData => {
+  return Axios.post('/api/v1/upload-file', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      token: localStorage.getItem('token')
+    },
+  }).then(response => response.data)
+}
+
 const request = ({ method = "get", url, data, params, extra }) => {
   return new Promise((resolve, reject) => {
     const config = { url, method, ...extra };
@@ -45,13 +54,13 @@ export const getFiles = () => {
   });
 }
 
-export const fileUpload = (data) => {
-  return request({
-    method: "post",
-    url: "/api/v1/upload-file",
-    data
-  })
-}
+// export const fileUpload = (formData) => {
+//   return request({
+//     method: "post",
+//     url: "/api/v1/upload-file",
+//     formData,
+//   })
+// }
 
 export const deleteFile = (id) => {
   return request({

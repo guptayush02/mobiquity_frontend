@@ -54,6 +54,7 @@ export default function Dashboard() {
   const [shareUrlId, setShareUrlId] = useState(null)
   const [uploadedFileName, setUploadedFileName] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [fileName, setFileName] = useState(null)
   const [file, setFile] = useState(null)
 
   const getAllFiles = async() => {
@@ -63,14 +64,14 @@ export default function Dashboard() {
 
   const uploadFile = async() => {
     setIsLoading(true)
+    const formData = new FormData()
     console.log("upload file")
-    const body = {
-      title,
-      description,
-      uploadedFile,
-      uploadedFileName,
-    }
-    const result = await fileUpload(body)
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('file', file)
+    formData.append('fileName', fileName)
+
+    const result = await fileUpload(formData)
     if (result.code === 200) {
       setIsLoading(false)
       getAllFiles()
@@ -80,16 +81,8 @@ export default function Dashboard() {
   }
 
   const handleCapture = async({ target }) => {
-    const fileReader = new FileReader();
-    const name = target.accept.includes('image') ? 'images' : 'videos';
-    const file = target.files[0]
-    setFile(file)
-    const newFileName = target.files[0].name
-    setUploadedFileName(newFileName)
-    fileReader.readAsDataURL(target.files[0]);
-    fileReader.onload = (e) => {
-      setUploadedFile(e.target.result)
-    }
+    setFile(target.files[0])
+    setFileName(target.files[0].name)
   }
 
   const deleteFileById = async(id) => {
@@ -117,7 +110,6 @@ export default function Dashboard() {
               <TableCell>ID</TableCell>
               <TableCell align="right">Title</TableCell>
               <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Url</TableCell>
               <TableCell align="right">Delete</TableCell>
               <TableCell align="right">Share</TableCell>
             </TableRow>
@@ -133,7 +125,6 @@ export default function Dashboard() {
                 </TableCell>
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.url}</TableCell>
                 <TableCell align="right">
                   <IconButton aria-label="delete">
                     <DeleteIcon onClick={() => deleteFileById(row.id)} />
