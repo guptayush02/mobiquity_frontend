@@ -14,7 +14,6 @@ export default function Login() {
   const [emailError, setEmailError] = useState(false)
 
   const enterAccount = async() => {
-    navigate('/dashboard')
     if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
       const body = {
         email,
