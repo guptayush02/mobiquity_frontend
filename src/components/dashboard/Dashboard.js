@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FormControl, Box, TextField, Modal, Button, IconButton, Typography, FormGroup, FormControlLabel, Input } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -52,6 +53,8 @@ export default function Dashboard() {
   const [uploadedFile, setUploadedFile] = useState(null)
   const [shareUrlId, setShareUrlId] = useState(null)
   const [uploadedFileName, setUploadedFileName] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [file, setFile] = useState(null)
 
   const getAllFiles = async() => {
     const result = await getFiles()
@@ -59,17 +62,17 @@ export default function Dashboard() {
   }
 
   const uploadFile = async() => {
+    setIsLoading(true)
     console.log("upload file")
     const body = {
       title,
       description,
       uploadedFile,
-      uploadedFileName
+      uploadedFileName,
     }
-    console.log("body---->", body)
-    return
     const result = await fileUpload(body)
     if (result.code === 200) {
+      setIsLoading(false)
       getAllFiles()
       setOpen(false)
       return toast.success(result.message)
@@ -80,6 +83,7 @@ export default function Dashboard() {
     const fileReader = new FileReader();
     const name = target.accept.includes('image') ? 'images' : 'videos';
     const file = target.files[0]
+    setFile(file)
     const newFileName = target.files[0].name
     setUploadedFileName(newFileName)
     fileReader.readAsDataURL(target.files[0]);
@@ -190,7 +194,9 @@ export default function Dashboard() {
                 </Button> */}
               </label>
               <Button variant="contained" component="span" onClick={uploadFile}>
-                Upload
+                {
+                  isLoading ? <CircularProgress /> : 'Upload'
+                }
               </Button>
             </FormControl>
           </Typography>
