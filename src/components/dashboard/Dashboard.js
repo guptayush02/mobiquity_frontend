@@ -11,7 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import { getFiles, deleteFile } from '../../services/api'
 import ShareIcon from '@mui/icons-material/Share';
 import { fileUpload } from '../../services/api'
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import config from '../../constants/config'
 
 const style = {
   position: 'absolute',
@@ -56,10 +57,18 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false)
   const [fileName, setFileName] = useState(null)
   const [file, setFile] = useState(null)
+  const [fileLoading, setFileLoading] = useState(false)
 
   const getAllFiles = async() => {
-    const result = await getFiles()
-    setFiles(result.body.files)
+    try {
+      setFileLoading(true)
+      const result = await getFiles()
+      setFiles(result.body.files)
+      setFileLoading(false)
+    } catch (err) {
+      setFiles([])
+      setFileLoading(false)
+    }
   }
 
   const uploadFile = async() => {
@@ -115,31 +124,35 @@ export default function Dashboard() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {files.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell align="right">{row.title}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">
-                  <IconButton aria-label="delete">
-                    <DeleteIcon onClick={() => deleteFileById(row.id)} />
-                  </IconButton>
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton aria-label="delete">
-                    <ShareIcon onClick={() => setShareUrlId(row.id)} />
-                  </IconButton>
-                  {
-                    shareUrlId === row.id && `http://localhost:3000/public-file?id=${shareUrlId}`
-                  }
-                </TableCell>
-              </TableRow>
-            ))}
+            {
+              fileLoading ? <CircularProgress color={'inherit'} /> :
+              files.length > 0 ?
+                files.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="right">{row.title}</TableCell>
+                    <TableCell align="right">{row.description}</TableCell>
+                    <TableCell align="right">
+                      <IconButton aria-label="delete">
+                        <DeleteIcon onClick={() => deleteFileById(row.id)} />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton aria-label="delete">
+                        <ShareIcon onClick={() => setShareUrlId(row.id)} />
+                      </IconButton>
+                      {
+                        shareUrlId === row.id && `${config.API_URL}/public-file?id=${shareUrlId}`
+                      }
+                    </TableCell>
+                  </TableRow>
+              )) : 'Files not found'
+            }
           </TableBody>
         </Table>
       </TableContainer>
@@ -186,7 +199,7 @@ export default function Dashboard() {
               </label>
               <Button variant="contained" component="span" onClick={uploadFile}>
                 {
-                  isLoading ? <CircularProgress /> : 'Upload'
+                  isLoading ? <CircularProgress color={'inherit'} /> : 'Submit'
                 }
               </Button>
             </FormControl>

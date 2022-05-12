@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { FormControl, Box, TextField, Button, Link } from '@mui/material';
 import { signup } from '../../services/api'
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'material-react-toastify';
 
 export default function Index() {
 
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [emailError, setEmailError] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   const createAccount = async() => {
-    const body = {
-      name,
-      email,
-      password
+    if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+      setEmailError(false)
+      const body = {
+        name,
+        email,
+        password
+      }
+      const result = await signup(body)
+      if (result.code === 200) {
+        toast("Signup successfully");
+        setSuccess("Signup Successfully, Please login")
+      }
+    } else {
+      setError('Enter a valid email')
+      setEmailError(true)
     }
-    const result = await signup(body)
-    if (result.code === 200) {
-      toast.success('Signup successfully')
-    }
-
   }
 
   return (
@@ -46,7 +55,9 @@ export default function Index() {
           variant="filled"
           size="small"
           type="email"
+          error={emailError === true}
           placeholder="Email"
+          helperText={error}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Box mt={2} />
@@ -62,6 +73,7 @@ export default function Index() {
         />
         <Box mt={2} />
         <Button variant="outlined" onClick={() => createAccount()}>Signup</Button>
+        {success}
         <Box mt={2} />
         Already have an account <Link href="/login">Login</Link>
       </FormControl>
