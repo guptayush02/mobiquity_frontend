@@ -13,6 +13,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { fileUpload } from '../../services/api'
 import { ToastContainer, toast } from 'react-toastify';
 import config from '../../constants/config'
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: 'absolute',
@@ -28,24 +29,13 @@ const style = {
 
 export default function Dashboard() {
 
-  function createData(id, title, description, url) {
-    return { id, title, description, url};
-  }
-  
-  const rows = [
-    createData(1, 'title', 'description', 'url'),
-    createData(2, 'title', 'description', 'url'),
-    createData(3, 'title', 'description', 'url'),
-    createData(4, 'title', 'description', 'url'),
-    createData(5, 'title', 'description', 'url'),
-  ];
-
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
 
   useEffect(() => {
     getAllFiles()
   }, [])
+  const navigate = useNavigate();
 
   const [files, setFiles] = useState([]);
   const [open, setOpen] = useState(false)
@@ -102,6 +92,10 @@ export default function Dashboard() {
     }
   }
 
+  const logout = () => {
+    localStorage.removeItem('ekanekToken')
+    navigate('/login')
+  }
 
   return (
     <Box
@@ -110,7 +104,20 @@ export default function Dashboard() {
       justifyContent='center'
       flexDirection='column'
     >
-      <Button variant="outlined" onClick={handleOpenModal}>Upload Form</Button>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          p: 1,
+          m: 1,
+          bgcolor: 'background.paper',
+          justifyContent: 'space-between',
+          borderRadius: 1,
+        }}
+      >
+        <Button variant="outlined" onClick={handleOpenModal}>Upload Form</Button>
+        <Button variant="outlined" component="span" onClick={logout}>Logout</Button>
+      </Box>
       <Box mt={10} />
       <TableContainer >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
