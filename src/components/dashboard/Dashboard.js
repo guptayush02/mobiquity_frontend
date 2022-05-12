@@ -38,8 +38,6 @@ export default function Dashboard() {
     createData(5, 'title', 'description', 'url'),
   ];
 
-  console.log("rows-->", rows)
-
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
 
@@ -51,8 +49,9 @@ export default function Dashboard() {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState(null)
   const [description, setDescription] = useState(null)
-  const [url, setUrl] = useState(null)
+  const [uploadedFile, setUploadedFile] = useState(null)
   const [shareUrlId, setShareUrlId] = useState(null)
+  const [uploadedFileName, setUploadedFileName] = useState(null)
 
   const getAllFiles = async() => {
     const result = await getFiles()
@@ -64,8 +63,11 @@ export default function Dashboard() {
     const body = {
       title,
       description,
-      url
+      uploadedFile,
+      uploadedFileName
     }
+    console.log("body---->", body)
+    return
     const result = await fileUpload(body)
     if (result.code === 200) {
       getAllFiles()
@@ -77,12 +79,13 @@ export default function Dashboard() {
   const handleCapture = async({ target }) => {
     const fileReader = new FileReader();
     const name = target.accept.includes('image') ? 'images' : 'videos';
+    const file = target.files[0]
+    const newFileName = target.files[0].name
+    setUploadedFileName(newFileName)
     fileReader.readAsDataURL(target.files[0]);
     fileReader.onload = (e) => {
-      console.log("e--->", e.target.result)
-      setUrl('http://jfjfj')
+      setUploadedFile(e.target.result)
     }
-
   }
 
   const deleteFileById = async(id) => {
