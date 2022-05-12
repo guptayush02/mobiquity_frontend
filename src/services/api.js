@@ -54,14 +54,6 @@ export const getFiles = () => {
   });
 }
 
-// export const fileUpload = (formData) => {
-//   return request({
-//     method: "post",
-//     url: "/api/v1/upload-file",
-//     formData,
-//   })
-// }
-
 export const deleteFile = (id) => {
   return request({
     method: "delete",
