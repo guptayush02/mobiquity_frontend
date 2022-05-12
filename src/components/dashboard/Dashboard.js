@@ -68,6 +68,8 @@ export default function Dashboard() {
     }
     const result = await fileUpload(body)
     if (result.code === 200) {
+      getAllFiles()
+      setOpen(false)
       return toast.success(result.message)
     }
   }
@@ -86,6 +88,7 @@ export default function Dashboard() {
   const deleteFileById = async(id) => {
     const result = await deleteFile(id)
     if (result.code === 200) {
+      getAllFiles()
       return toast.success(result.message)
     }
   }
@@ -113,7 +116,7 @@ export default function Dashboard() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {files.map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

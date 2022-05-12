@@ -7,8 +7,8 @@ Axios.defaults.baseURL = config.API_URL
 const request = ({ method = "get", url, data, params, extra }) => {
   return new Promise((resolve, reject) => {
     const config = { url, method, ...extra };
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (token) config.headers = { Authorization: `Bearer ${token}` };
+    const token = localStorage.getItem('token');
+    if (token) config.headers = { token: `${token}` };
     if (!["GET", "get"].includes(method) && data) config.data = data;
     if (params) config.params = params;
     Axios({ ...config })
