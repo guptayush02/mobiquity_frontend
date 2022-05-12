@@ -15,6 +15,7 @@ export default function Index() {
   const createAccount = async() => {
     if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
       setEmailError(false)
+      setError(null)
       const body = {
         name,
         email,
@@ -73,7 +74,7 @@ export default function Index() {
         />
         <Box mt={2} />
         <Button variant="outlined" onClick={() => createAccount()}>Signup</Button>
-        {success}
+        <Box sx={{ color: 'rgb(102, 187, 106)' }}>{success}</Box>
         <Box mt={2} />
         Already have an account <Link href="/login">Login</Link>
       </FormControl>
