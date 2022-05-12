@@ -9,16 +9,26 @@ export default function Login() {
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
+  const [emailError, setEmailError] = useState(false)
 
   const enterAccount = async() => {
-    navigate('/dashboard')
-    const body = {
-      email,
-      password
-    }
-    const result = await login(body)
-    if (result.code === 200) {
-      await localStorage.setItem('token', result.body.token) 
+    if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+      const body = {
+        email,
+        password
+      }
+      const result = await login(body)
+      console.log("result--->", result)
+      setMessage(result.message)
+      if (result.code === 200) {
+        await localStorage.setItem('ekanekToken', result.body.token)
+        navigate('/dashboard')
+      }
+    } else {
+      setError('Enter a valid email')
+      setEmailError(true)
     }
   }
 
@@ -37,6 +47,8 @@ export default function Login() {
           size="small"
           type="email"
           placeholder="Email"
+          error={emailError === true}
+          helperText={error}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Box mt={2} />
@@ -52,6 +64,7 @@ export default function Login() {
         />
         <Box mt={2} />
         <Button variant="outlined" onClick={() => enterAccount()}>Login</Button>
+        <Box sx={{ color: 'rgb(102, 187, 106)' }}>{message}</Box>
         <Box mt={2} />
         Create a new Account <Link href="/">Signup</Link>
       </FormControl>

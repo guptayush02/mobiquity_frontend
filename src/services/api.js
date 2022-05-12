@@ -8,7 +8,7 @@ export const fileUpload = formData => {
   return Axios.post('/api/v1/upload-file', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('ekanekToken')
     },
   }).then(response => response.data)
 }
@@ -16,7 +16,7 @@ export const fileUpload = formData => {
 const request = ({ method = "get", url, data, params, extra }) => {
   return new Promise((resolve, reject) => {
     const config = { url, method, ...extra };
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('ekanekToken');
     if (token) config.headers = { token: `${token}` };
     if (!["GET", "get"].includes(method) && data) config.data = data;
     if (params) config.params = params;
