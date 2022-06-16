@@ -8,3 +8,6 @@
 
 # Build
 - `npm run build`
+
+# env
+- Rename .env.example to .env and change REACT_APP_API_URL accordingly
