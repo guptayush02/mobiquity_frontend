@@ -20,10 +20,10 @@ export default function Login() {
         password
       }
       const result = await login(body)
-      console.log("result--->", result)
+      console.log("result-->", result)
       setMessage(result.message)
       if (result.code === 200) {
-        await localStorage.setItem('ekanekToken', result.body.token)
+        await localStorage.setItem('token', result.body.token)
         navigate('/dashboard')
       }
     } else {

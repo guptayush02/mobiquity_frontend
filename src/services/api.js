@@ -8,7 +8,7 @@ export const fileUpload = formData => {
   return Axios.post('/api/v1/upload-file', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      token: localStorage.getItem('ekanekToken')
+      token: localStorage.getItem('token')
     },
   }).then(response => response.data)
 }
@@ -16,7 +16,7 @@ export const fileUpload = formData => {
 const request = ({ method = "get", url, data, params, extra }) => {
   return new Promise((resolve, reject) => {
     const config = { url, method, ...extra };
-    const token = localStorage.getItem('ekanekToken');
+    const token = localStorage.getItem('token');
     if (token) config.headers = { token: `${token}` };
     if (!["GET", "get"].includes(method) && data) config.data = data;
     if (params) config.params = params;
@@ -47,23 +47,39 @@ export const login = (data) => {
   });
 }
 
-export const getFiles = () => {
+export const getAtmList = (city) => {
   return request({
     method: "get",
-    url: "/api/v1/files"
+    url: `/api/v1/atm-lists?city=${city}`
   });
 }
 
-export const deleteFile = (id) => {
+export const deleteAtm = (id) => {
   return request({
     method: "delete",
-    url: `/api/v1/file/${id}`
+    url: `/api/v1/atm/${id}`
   })
 }
 
-export const sharedLink = (id) => {
+export const createAtm = (data) => {
+  return request({
+    method: "post",
+    url: `/api/v1/atm`,
+    data
+  })
+}
+
+export const updateAtm = (data, id) => {
+  return request({
+    method: "put",
+    url: `/api/v1/atm/${id}`,
+    data
+  })
+}
+
+export const citiesList = () => {
   return request({
     method: "get",
-    url: `/api/v1/public-file?id=${id}`
-  })
+    url: `/api/v1/city-list`
+  });
 }

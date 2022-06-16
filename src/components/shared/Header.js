@@ -14,9 +14,6 @@ export default function Header({children}) {
     <Box sx={{ flexGrow: 1 }} style={{position: 'sticky'}}>
       <AppBar sx={{bgcolor: '#000'}} position="fixed">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            File Upload
-          </Typography>
         </Toolbar>
       </AppBar>
       <main className={`transition-all duration-500 ease-in-out flex flex-grow bg-white`}>{children}</main>
